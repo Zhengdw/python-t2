@@ -1,6 +1,8 @@
 import numpy as np
 from math import factorial
 from itertools import combinations
+from visual import *
+from visual.graph import *
 
 h = 6.62606957 * 10 ** -34      #Plank's constant
 #m = 1.67492735174 * 10 ** -27   #this is mass of neutron
@@ -9,7 +11,7 @@ L = 0.39 * 10**-9               #size of box
 convert  = 6.24150934 * 10**18
 maximum = 100
 
-energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(100)),dtype=float)
+energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(1,maximum)),dtype=float)
 #this creates the entire table of energy levels as a single list
 
 def energy(n):
@@ -64,18 +66,33 @@ def cartesian(arrays, out=None):
         for j in xrange(1, arrays[0].size):
             out[j*m:(j+1)*m,1:] = out[0:m,1:]
     return out
-
-def combinations(array,n):
-    """
-    Take an array and output all combinations of n
-    """
+'''
+#def fermion(n):
+    config = []
+    energycount = []
+    for i in range(n):
+        config.append(i+1)
+    while sum(config) < 3*max(energylevels) - 3:
+        total = 0
+        for part in config:
+            total = total + part
+        energycount.append(total)
+        cont = True
+        while cont:
+            if config[n-1] != maximum:
+                config[n-1] = config[n-1] + 1
+            else:
+                
+'''       
+        #I need to find some way to have the configuration update properly
+        #Is there some way to make a recursive if loop?
     
-"""
-def boson(n):
-    energyconfigs=cartesian([energylevel,energylevel,energylevel,energylevel])
-    print energyconfigs[1]
 
-"""
+def boson(number):
+    energyconfigs=cartesian([energylevels[0:20] for x in range(number)])
+    print (energyconfigs[1])
+    
+
 
 def fermion(number):
     energycount = []
@@ -88,9 +105,12 @@ def fermion(number):
             total = total + energy(i)
         energycount.append(total)
     #return number of configurations in energy range
-    a = (max(energycount) - min(energycount))/300
+    maxi = 10**7
+    a = (max(energycount) - min(energycount))/200
     fnc1 = ghistogram(bins = arange(min(energycount), max(energycount), int(round(a))), color = color.red)
     fnc1.plot(data=energycount)
-    return np.histogram(energycount,bins = 300,weights = None, density = False)
+    #return np.histogram(energycount,bins = 100,weights = None, density = False)
+
+
 
 
