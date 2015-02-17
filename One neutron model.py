@@ -9,7 +9,7 @@ h = 6.62606957 * 10 ** -34      #Plank's constant
 m = 9.11 * 10**-31             #this is mass of electron
 L = 0.39 * 10**-9               #size of box
 convert  = 6.24150934 * 10**18
-maximum = 100
+maximum = 50
 
 energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(1,maximum)),dtype=float)
 #this creates the entire table of energy levels as a single list
@@ -63,30 +63,30 @@ def cartesian(arrays, out=None):
     out[:,0] = np.repeat(arrays[0], m)
     if arrays[1:]:
         cartesian(arrays[1:], out=out[0:m,1:])
-        for j in xrange(1, arrays[0].size):
+        for j in range(1, arrays[0].size):
             out[j*m:(j+1)*m,1:] = out[0:m,1:]
     return out
-'''
-#def fermion(n):
-    config = []
-    energycount = []
-    for i in range(n):
-        config.append(i+1)
-    while sum(config) < 3*max(energylevels) - 3:
-        total = 0
-        for part in config:
-            total = total + part
-        energycount.append(total)
-        cont = True
-        while cont:
-            if config[n-1] != maximum:
-                config[n-1] = config[n-1] + 1
-            else:
-                
-'''       
-        #I need to find some way to have the configuration update properly
-        #Is there some way to make a recursive if loop?
     
+
+def fermions(n):
+    arr = cartesian([energylevels[0:maximum-1] for x in range(n)])
+    energycount = []
+    for i in range(len(arr)):
+        unique = []
+        for i2 in range(len(arr[i])):
+            if arr[i][i2] not in unique:
+                unique.append(arr[i][i2])           
+        if len(unique) == len(arr[i]):
+            total = 0
+            for x in arr[i]:
+                total = total + energy(x)
+            energycount.append(total)
+
+    a = (max(energycount) - min(energycount))/100
+    fnc1 = ghistogram(bins = arange(min(energycount), max(energycount), int(round(a))), color = color.red)
+    fnc1.plot(data=energycount)
+#^this one is better, although not as efficient as it could be
+
 
 def boson(number):
     energyconfigs=cartesian([energylevels[0:20] for x in range(number)])
@@ -98,6 +98,7 @@ def fermion(number):
     energycount = []
     #generate some list of all possible combinations of energy levels (incomplete)
     fermionlist = list(combinations(energylevels,int(number)))
+    print(len(fermionlist))
     #calculate total energy of each configuration
     for config in fermionlist:
         total = 0
@@ -105,7 +106,6 @@ def fermion(number):
             total = total + energy(i)
         energycount.append(total)
     #return number of configurations in energy range
-    maxi = 10**7
     a = (max(energycount) - min(energycount))/200
     fnc1 = ghistogram(bins = arange(min(energycount), max(energycount), int(round(a))), color = color.red)
     fnc1.plot(data=energycount)
