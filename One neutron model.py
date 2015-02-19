@@ -9,9 +9,9 @@ h = 6.62606957 * 10 ** -34      #Plank's constant
 m = 9.11 * 10**-31             #this is mass of electron
 L = 0.39 * 10**-9               #size of box
 convert  = 6.24150934 * 10**18
-maximum = 50
+maximum = 30
 
-energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(1,maximum)),dtype=float)
+energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(maximum+1)),dtype=float)
 #this creates the entire table of energy levels as a single list
 
 def energy(n):
@@ -98,13 +98,13 @@ def fermion(number):
     energycount = []
     #generate some list of all possible combinations of energy levels (incomplete)
     fermionlist = list(combinations(energylevels,int(number)))
-    print(len(fermionlist))
     #calculate total energy of each configuration
     for config in fermionlist:
         total = 0
         for i in config:
-            total = total + energy(i)
-        energycount.append(total)
+            total = total + i
+        if total < energy(maximum):
+            energycount.append(total)
     #return number of configurations in energy range
     a = (max(energycount) - min(energycount))/200
     fnc1 = ghistogram(bins = arange(min(energycount), max(energycount), int(round(a))), color = color.red)
