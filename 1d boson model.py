@@ -166,8 +166,8 @@ energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(maximum+1)
 #unoptomizedbosonconfigs(5,energylevels,1000,300)
 
 threedconfig=cartesian([energylevels for x in range(3)])
-threedenergylevel=np.fromiter((np.sum(threedconfig[x]) for x in range(threedconfig.size/3)),dtype=float)
+threedenergylevel=np.fromiter((np.sum(threedconfig[x]) for x in range(int(threedconfig.size/3))),dtype=float)
 threedenergylevel.sort()
-a = (max(threedenergylevel) - min(threedenergylevel))/1000
-fnc2 = ghistogram(bins = arange(0,max(threedenergylevel)), color = color.red)
+a = (max(threedenergylevel) - min(threedenergylevel))/100
+fnc2 = ghistogram(bins = arange(0,max(threedenergylevel),a), color = color.red)
 fnc2.plot(data=threedenergylevel)
