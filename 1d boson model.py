@@ -150,7 +150,6 @@ def unoptomizedbosonconfigs(n,Earray,Emax,res):
         for j in configs[i]:
             Econfigs[i]+=j
     a = (max(Econfigs) - min(Econfigs))/res
-    print Econfigs
     fnc1 = ghistogram(bins = arange(0,Emax,a), color = color.red)
     fnc1.plot(data=([x for x in Econfigs if x<Emax]))
 
@@ -164,4 +163,11 @@ maximum = 30
 
 energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(maximum+1)),dtype=float)
 #this creates the entire table of energy levels as a single list
-unoptomizedbosonconfigs(5,energylevels,1000,300)
+#unoptomizedbosonconfigs(5,energylevels,1000,300)
+
+threedconfig=cartesian([energylevels for x in range(3)])
+threedenergylevel=np.fromiter((np.sum(threedconfig[x]) for x in range(threedconfig.size/3)),dtype=float)
+threedenergylevel.sort()
+a = (max(threedenergylevel) - min(threedenergylevel))/1000
+fnc2 = ghistogram(bins = arange(0,max(threedenergylevel)), color = color.red)
+fnc2.plot(data=threedenergylevel)
