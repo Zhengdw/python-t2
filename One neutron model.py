@@ -95,6 +95,7 @@ def boson(number):
 
 
 def fermion(number):
+    gdisplay(title = "Number of configurations with respect to energy")
     energycount = []
     #generate some list of all possible combinations of energy levels (incomplete)
     fermionlist = list(combinations(energylevels,int(number)))
