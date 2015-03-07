@@ -1,12 +1,31 @@
 import numpy as np
 
+def factorial(n):
+    out=1
+    for x in range(n):
+        out=out*(x+1)
+    return out
+
+def bosonconfigs(numelvl,numpart):
+    x=numpart
+    n=numelvl
+    out=choose(x+n-1,x)
+    return out
+
+def choose(choices,x):
+    if choices>=x:
+        out=int(factorial(choices)/((factorial(x)*factorial(choices-x))))
+    else:
+        out=0
+    return out
+
 def configs(x,elvl,particle="boson",out=None):
     """
     Generate configs for bosons or fermions.
 
     Parameters
     ----------
-    num : positive integer
+    x : positive integer
         Number of particles in the system
     Energylvls : 1-D array
         List of valid energy states of the system
@@ -58,22 +77,26 @@ def configs(x,elvl,particle="boson",out=None):
                 k=end
         return out
 
-    
-def factorial(n):
-    out=1
-    for x in range(n):
-        out=out*(x+1)
-    return out
+h = 6.62606957 * 10 ** -34      #Plank's constant
+#m = 1.67492735174 * 10 ** -27   #this is mass of neutron
+m = 9.11 * 10**-31             #this is mass of electron
+L = 0.39 * 10**-9               #size of box
+convert  = 6.24150934 * 10**18
+maximum = 30
 
-def bosonconfigs(numelvl,numpart):
-    x=numpart
-    n=numelvl
-    out=choose(x+n-1,x)
-    return out
+energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(maximum+1)),dtype=float)
+#this creates the entire table of energy levels as a single list
 
-def choose(choices,x):
-    if choices>=x:
-        out=int(factorial(choices)/((factorial(x)*factorial(choices-x))))
-    else:
-        out=0
-    return out
+def ThreeDEnergy(n):
+    out=np.empty(n**3)
+    index=0
+    for i in range(1,n+1):
+        for j in range(1,n+1):
+            for k in range(1,n+1):
+                out[index]=((i*h/L)**2+(j*h/L)**2+(k*h/L)**2)/(8*m)*convert
+                index=index+1
+    return np.sort(out)
+
+
+
+
