@@ -1,4 +1,11 @@
 import numpy as np
+from math import *
+from visual import *
+from visual.graph import *
+
+
+def energy(n):
+    return ((n*h/L)**2)/(8*m)*convert
 
 def factorial(n):
     out=1
@@ -83,6 +90,7 @@ m = 9.11 * 10**-31             #this is mass of electron
 L = 0.39 * 10**-9               #size of box
 convert  = 6.24150934 * 10**18
 maximum = 30
+kb = 1.3806488 * 10**-23
 
 energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(maximum+1)),dtype=float)
 #this creates the entire table of energy levels as a single list
@@ -97,6 +105,47 @@ def ThreeDEnergy(n):
                 index=index+1
     return np.sort(out)
 
+def fermion(n):
+    energycount = []
+    energy = ThreeDEnergy(maximum)
+    fermionlist = configs(n,energy,'fermion')
+    for config in fermionlist:
+        if config < energy(maximum):
+            energycount.append(config)
+    #return number of configurations in energy range
+    a = (max(energycount) - min(energycount))/200
+    fnc1 = ghistogram(bins = arange(min(energycount), max(energycount), int(round(a))), color = color.red)
+    fnc1.plot(data=energycount)
+    hist, binedges = np.histogram(energycount,bins = 100,weights = None, density = False)
+    print(hist,binedges)
+   
+    
+def boltzfit(xvalues,yvalues,degree):
+    xlist = []
+    for i in range(len(xvalues)-1):
+        xlist.append((xvalue[i] + xvalue[i+1])/(2*convert)) #Average energy in joules
+    for j in range(len(yvalues)):
+        yvalues[j] = kb*log(yvalues[j]) #Convert to boltzmann entropy
+    return np.polyfit(xlist,yvalues,degree)
+
+def gibbsfit(xvalues,yvalues,degree):
+    xlist = []
+    for i in range(len(xvalues)-1):
+        xlist.append((xvalue[i] + xvalue[i+1])/(2*convert)) #Average energy in joules
+    for j in range(len(yvalues)): #generate gibbs configurations
+        if j > 0:
+            yvalues[j] = yvalues[j-1] + yvalues[j]
+        print (yvalues[j])
+    for j in range(len(yvalues)):
+        yvalues[j] = kb*log(yvalues[j]) #Convert to entropy
+    return np.polyfit(xlist,yvalues,degree)
+
+        
+                   
+
+
+    
+    
 
 
 
