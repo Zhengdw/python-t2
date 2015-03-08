@@ -89,7 +89,7 @@ h = 6.62606957 * 10 ** -34      #Plank's constant
 m = 9.11 * 10**-31             #this is mass of electron
 L = 0.39 * 10**-9               #size of box
 convert  = 6.24150934 * 10**18
-maximum = 30
+maximum = 10
 kb = 1.3806488 * 10**-23
 
 energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(maximum+1)),dtype=float)
@@ -117,7 +117,7 @@ def fermion(n):
     fnc1 = ghistogram(bins = arange(min(energycount), max(energycount), int(round(a))), color = color.red)
     fnc1.plot(data=energycount)
     hist, binedges = np.histogram(energycount,bins = 100,weights = None, density = False)
-    print(hist,binedges)
+    return (hist,binedges)
    
     
 def boltzfit(xvalues,yvalues,degree):
@@ -140,7 +140,15 @@ def gibbsfit(xvalues,yvalues,degree):
         yvalues[j] = kb*log(yvalues[j]) #Convert to entropy
     return np.polyfit(xlist,yvalues,degree)
 
-        
+def entropy(n,degree,particle=='boson',method=='gibbs'):
+    if particle == 'boson':
+        data = boson(n)
+    if particle == 'fermion':
+        data = fermion(n)
+    if method == 'boltzmann':
+        return (boltzfit(data[1],data[0],degree))
+    if method == 'gibbs':
+        return (gibbsfit(data[1],data[0],degree))        
                    
 
 
