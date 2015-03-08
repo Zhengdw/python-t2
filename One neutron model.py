@@ -1,5 +1,5 @@
 import numpy as np
-from math import factorial
+from math import *
 from itertools import combinations
 from visual import *
 from visual.graph import *
@@ -9,7 +9,7 @@ h = 6.62606957 * 10 ** -34      #Plank's constant
 m = 9.11 * 10**-31             #this is mass of electron
 L = 0.39 * 10**-9               #size of box
 convert  = 6.24150934 * 10**18
-maximum = 30
+maximum = 60
 
 energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(maximum+1)),dtype=float)
 #this creates the entire table of energy levels as a single list
@@ -81,7 +81,7 @@ def fermions(n):
             for x in arr[i]:
                 total = total + energy(x)
             energycount.append(total)
-
+    print (len(energycount))
     a = (max(energycount) - min(energycount))/100
     fnc1 = ghistogram(bins = arange(min(energycount), max(energycount), int(round(a))), color = color.red)
     fnc1.plot(data=energycount)
@@ -110,7 +110,10 @@ def fermion(number):
     a = (max(energycount) - min(energycount))/200
     fnc1 = ghistogram(bins = arange(min(energycount), max(energycount), int(round(a))), color = color.red)
     fnc1.plot(data=energycount)
-    #return np.histogram(energycount,bins = 100,weights = None, density = False)
+    hist, binedges = np.histogram(energycount,bins = 100,weights = None, density = False)
+    print(hist,binedges)
+   
+    
 
 
 
