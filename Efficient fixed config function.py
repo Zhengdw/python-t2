@@ -4,7 +4,7 @@ from visual import *
 from visual.graph import *
 
 
-def energy(n):
+def energy2(n):
     return ((n*h/L)**2)/(8*m)*convert
 
 def factorial(n):
@@ -89,7 +89,7 @@ h = 6.62606957 * 10 ** -34      #Plank's constant
 m = 9.11 * 10**-31             #this is mass of electron
 L = 0.39 * 10**-9               #size of box
 convert  = 6.24150934 * 10**18
-maximum = 10
+maximum = 20
 kb = 1.3806488 * 10**-23
 
 energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(maximum+1)),dtype=float)
@@ -109,8 +109,8 @@ def fermion(n):
     energycount = []
     energy = ThreeDEnergy(maximum)
     fermionlist = configs(n,energy,'fermion')
-    for config in fermionlist:
-        if config < energy(maximum):
+    for config in np.nditer(fermionlist):
+        if config < energy2(maximum):
             energycount.append(config)
     #return number of configurations in energy range
     a = (max(energycount) - min(energycount))/200
@@ -122,23 +122,23 @@ def fermion(n):
     
 def boltzfit(xvalues,yvalues,degree):
     xlist = []
+    ylist = []
     for i in range(len(xvalues)-1):
-        xlist.append((xvalue[i] + xvalue[i+1])/(2*convert)) #Average energy in joules
+        xlist.append((xvalues[i] + xvalues[i+1])/(2*convert)) #Average energy in joules
     for j in range(len(yvalues)):
-        yvalues[j] = kb*log(yvalues[j]) #Convert to boltzmann entropy
-    return np.polyfit(xlist,yvalues,degree)
+        ylist.append(kb*log(yvalues[j])) #Convert to boltzmann entropy
+    return np.polyfit(xlist,ylist,degree)
 
 def gibbsfit(xvalues,yvalues,degree):
     xlist = []
     for i in range(len(xvalues)-1):
-        xlist.append((xvalue[i] + xvalue[i+1])/(2*convert)) #Average energy in joules
+        xlist.append((xvalues[i] + xvalues[i+1])/(2*convert)) #Average energy in joules
     for j in range(len(yvalues)): #generate gibbs configurations
         if j > 0:
             yvalues[j] = yvalues[j-1] + yvalues[j]
-        print (yvalues[j])
     for j in range(len(yvalues)):
-        yvalues[j] = kb*log(yvalues[j]) #Convert to entropy
-    return np.polyfit(xlist,yvalues,degree)
+        ylist.append(kb*log(yvalues[j])) #Convert to entropy
+    return np.polyfit(xlist,ylist,degree)
 
 def entropy(n,degree,particle ='boson',method ='gibbs'):
     if particle == 'boson':
