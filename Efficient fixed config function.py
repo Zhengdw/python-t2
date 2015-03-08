@@ -140,7 +140,7 @@ def gibbsfit(xvalues,yvalues,degree):
         yvalues[j] = kb*log(yvalues[j]) #Convert to entropy
     return np.polyfit(xlist,yvalues,degree)
 
-def entropy(n,degree,particle=='boson',method=='gibbs'):
+def entropy(n,degree,particle ='boson',method ='gibbs'):
     if particle == 'boson':
         data = boson(n)
     if particle == 'fermion':
