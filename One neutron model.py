@@ -9,7 +9,7 @@ h = 6.62606957 * 10 ** -34      #Plank's constant
 m = 9.11 * 10**-31             #this is mass of electron
 L = 0.39 * 10**-9               #size of box
 convert  = 6.24150934 * 10**18
-maximum = 60
+maximum = 100
 
 energylevels = np.fromiter((((x*h/L)**2)/(8*m)*convert for x in range(maximum+1)),dtype=float)
 #this creates the entire table of energy levels as a single list
