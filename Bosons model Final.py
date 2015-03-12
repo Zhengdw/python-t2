@@ -108,10 +108,10 @@ def boson(n,nthElvl,acc):
     acc is integer of histogram(s)
     '''
     Elvl= oneDEnergy(nthElvl)
-    print Elvl
-    econf= configs(n, Elvl, particle="boson")
+    #print Elvl
+    econf= np.sort(configs(n, Elvl, particle="boson"))
     max_energy=Elvl[-1]+(n-1)*Elvl[0]
-    np.sort(econf)
+    #np.sort(econf)
     fcn1 = ghistogram(bins = np.linspace(econf[0],max_energy,acc))
     bound=True
     m=0
@@ -127,5 +127,5 @@ def boson(n,nthElvl,acc):
     
 
 
-boson(2,100,100)
+boson(5,100,100)
 
